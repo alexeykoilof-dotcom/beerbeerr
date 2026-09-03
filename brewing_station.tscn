@@ -1,0 +1,423 @@
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="Script" path="res://brewing_station.gd" id="1_station"]
+[ext_resource type="Script" path="res://brew_vat_interaction.gd" id="2_vat"]
+[ext_resource type="PackedScene" path="res://assets/brewing/beer_chan.glb" id="3_vat_model"]
+[ext_resource type="PackedScene" path="res://assets/brewing/wheat_model.glb" id="4_wheat_model"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.32, 0.16, 0.055, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Material_beer"]
+transparency = 1
+albedo_color = Color(0.95, 0.55, 0.08, 0.85)
+emission_enabled = true
+emission = Color(0.95, 0.38, 0.025, 1)
+emission_energy_multiplier = 0.35
+roughness = 0.72
+
+[sub_resource type="StyleBoxFlat" id="Style_brew_hud"]
+bg_color = Color(0.018, 0.028, 0.04, 0.32)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9, 0.94, 1, 0.58)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="Style_interaction_prompt"]
+bg_color = Color(1, 1, 1, 0.035)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.58)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 14.0
+content_margin_top = 7.0
+content_margin_right = 14.0
+content_margin_bottom = 7.0
+
+[sub_resource type="StandardMaterial3D" id="Material_hops"]
+albedo_color = Color(0.18, 0.72, 0.22, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Material_yeast"]
+albedo_color = Color(0.68, 0.3, 0.86, 1)
+roughness = 0.72
+
+[sub_resource type="CylinderShape3D" id="Shape_vat_floor"]
+radius = 0.88
+height = 0.16
+
+[sub_resource type="BoxShape3D" id="Shape_vat_side"]
+size = Vector3(0.49, 0.95, 0.14)
+
+[sub_resource type="CylinderMesh" id="Mesh_beer"]
+top_radius = 0.72
+bottom_radius = 0.72
+height = 0.08
+
+[sub_resource type="CylinderShape3D" id="Shape_detector"]
+radius = 0.74
+height = 0.95
+
+[sub_resource type="BoxMesh" id="Mesh_table_top"]
+size = Vector3(3.2, 0.16, 1.35)
+
+[sub_resource type="BoxShape3D" id="Shape_table_top"]
+size = Vector3(3.2, 0.16, 1.35)
+
+[sub_resource type="BoxMesh" id="Mesh_table_leg"]
+size = Vector3(0.16, 0.66, 0.16)
+
+[sub_resource type="BoxShape3D" id="Shape_table_leg"]
+size = Vector3(0.16, 0.66, 0.16)
+
+[sub_resource type="BoxShape3D" id="Shape_malt"]
+size = Vector3(0.62, 0.42, 0.62)
+
+[sub_resource type="SphereMesh" id="Mesh_hops"]
+radius = 0.3
+height = 0.6
+
+[sub_resource type="SphereShape3D" id="Shape_hops"]
+radius = 0.3
+
+[sub_resource type="CylinderMesh" id="Mesh_yeast"]
+top_radius = 0.27
+bottom_radius = 0.27
+height = 0.58
+
+[sub_resource type="CylinderShape3D" id="Shape_yeast"]
+radius = 0.27
+height = 0.58
+
+[node name="BrewingStation" type="Node3D"]
+script = ExtResource("1_station")
+
+[node name="BrewingVat" type="StaticBody3D" parent="."]
+collision_layer = 5
+collision_mask = 1
+editor_description = "Перемещайте этот узел в 3D-редакторе: модель, коллизии, детектор ингредиентов и пиво двигаются вместе."
+script = ExtResource("2_vat")
+
+[node name="FloorCollision" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0, 0.08, 0)
+shape = SubResource("Shape_vat_floor")
+
+[node name="SideCollision01" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0, 0.555, 0.88)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision02" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0.44, 0.555, 0.762102)
+rotation = Vector3(0, 0.523599, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision03" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0.762102, 0.555, 0.44)
+rotation = Vector3(0, 1.047198, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision04" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0.88, 0.555, 0)
+rotation = Vector3(0, 1.570796, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision05" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0.762102, 0.555, -0.44)
+rotation = Vector3(0, 2.094395, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision06" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0.44, 0.555, -0.762102)
+rotation = Vector3(0, 2.617994, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision07" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(0, 0.555, -0.88)
+rotation = Vector3(0, 3.141593, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision08" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(-0.44, 0.555, -0.762102)
+rotation = Vector3(0, 3.665191, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision09" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(-0.762102, 0.555, -0.44)
+rotation = Vector3(0, 4.18879, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision10" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(-0.88, 0.555, 0)
+rotation = Vector3(0, 4.712389, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision11" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(-0.762102, 0.555, 0.44)
+rotation = Vector3(0, 5.235988, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="SideCollision12" type="CollisionShape3D" parent="BrewingVat"]
+position = Vector3(-0.44, 0.555, 0.762102)
+rotation = Vector3(0, 5.759587, 0)
+shape = SubResource("Shape_vat_side")
+
+[node name="VatModel" parent="BrewingVat" instance=ExtResource("3_vat_model")]
+position = Vector3(0, 0.464, 0)
+scale = Vector3(0.59, 0.59, 0.59)
+
+[node name="BeerSurface" type="MeshInstance3D" parent="BrewingVat"]
+visible = false
+position = Vector3(0, 0.78, 0)
+material_override = SubResource("Material_beer")
+mesh = SubResource("Mesh_beer")
+
+[node name="IngredientDetector" type="Area3D" parent="BrewingVat"]
+position = Vector3(0, 0.52, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BrewingVat/IngredientDetector"]
+shape = SubResource("Shape_detector")
+
+[node name="IngredientTable" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+position = Vector3(-2.15, 0, 0.75)
+
+[node name="TableTop" type="MeshInstance3D" parent="IngredientTable"]
+position = Vector3(0, 0.74, 0)
+material_override = SubResource("Material_wood")
+mesh = SubResource("Mesh_table_top")
+
+[node name="TableTopCollision" type="CollisionShape3D" parent="IngredientTable"]
+position = Vector3(0, 0.74, 0)
+shape = SubResource("Shape_table_top")
+
+[node name="Leg01" type="MeshInstance3D" parent="IngredientTable"]
+position = Vector3(-1.38, 0.33, -0.475)
+material_override = SubResource("Material_wood")
+mesh = SubResource("Mesh_table_leg")
+
+[node name="Leg01Collision" type="CollisionShape3D" parent="IngredientTable"]
+position = Vector3(-1.38, 0.33, -0.475)
+shape = SubResource("Shape_table_leg")
+
+[node name="Leg02" type="MeshInstance3D" parent="IngredientTable"]
+position = Vector3(1.38, 0.33, -0.475)
+material_override = SubResource("Material_wood")
+mesh = SubResource("Mesh_table_leg")
+
+[node name="Leg02Collision" type="CollisionShape3D" parent="IngredientTable"]
+position = Vector3(1.38, 0.33, -0.475)
+shape = SubResource("Shape_table_leg")
+
+[node name="Leg03" type="MeshInstance3D" parent="IngredientTable"]
+position = Vector3(-1.38, 0.33, 0.475)
+material_override = SubResource("Material_wood")
+mesh = SubResource("Mesh_table_leg")
+
+[node name="Leg03Collision" type="CollisionShape3D" parent="IngredientTable"]
+position = Vector3(-1.38, 0.33, 0.475)
+shape = SubResource("Shape_table_leg")
+
+[node name="Leg04" type="MeshInstance3D" parent="IngredientTable"]
+position = Vector3(1.38, 0.33, 0.475)
+material_override = SubResource("Material_wood")
+mesh = SubResource("Mesh_table_leg")
+
+[node name="Leg04Collision" type="CollisionShape3D" parent="IngredientTable"]
+position = Vector3(1.38, 0.33, 0.475)
+shape = SubResource("Shape_table_leg")
+
+[node name="Ingredients" type="Node3D" parent="."]
+
+[node name="MaltPortion1" type="RigidBody3D" parent="Ingredients" groups=["brew_ingredient"]]
+position = Vector3(-3.15, 1.04, 0.75)
+mass = 0.6
+collision_layer = 2
+collision_mask = 1
+continuous_cd = true
+freeze = true
+metadata/ingredient_id = "malt"
+metadata/ingredient_name = "Солод"
+
+[node name="Visual" type="Node3D" parent="Ingredients/MaltPortion1"]
+editor_description = "Редактируемая модель первой порции солода. Перемещайте или вращайте этот Node3D, не меняя физический корень MaltPortion1."
+
+[node name="WheatModel" parent="Ingredients/MaltPortion1/Visual" instance=ExtResource("4_wheat_model")]
+position = Vector3(0.321805, 0.00864, -0.029439)
+scale = Vector3(0.23, 0.23, 0.23)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ingredients/MaltPortion1"]
+shape = SubResource("Shape_malt")
+
+[node name="Label3D" type="Label3D" parent="Ingredients/MaltPortion1"]
+visible = false
+position = Vector3(0, 0.55, 0)
+billboard = 1
+text = "Солод"
+font_size = 30
+outline_size = 6
+
+[node name="MaltPortion2" type="RigidBody3D" parent="Ingredients" groups=["brew_ingredient"]]
+position = Vector3(-2.48, 1.04, 0.75)
+mass = 0.6
+collision_layer = 2
+collision_mask = 1
+continuous_cd = true
+freeze = true
+metadata/ingredient_id = "malt"
+metadata/ingredient_name = "Солод"
+
+[node name="Visual" type="Node3D" parent="Ingredients/MaltPortion2"]
+rotation = Vector3(0, 3.141593, 0)
+editor_description = "Редактируемая модель второй порции солода. Перемещайте или вращайте этот Node3D, не меняя физический корень MaltPortion2."
+
+[node name="WheatModel" parent="Ingredients/MaltPortion2/Visual" instance=ExtResource("4_wheat_model")]
+position = Vector3(0.321805, 0.00864, -0.029439)
+scale = Vector3(0.23, 0.23, 0.23)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ingredients/MaltPortion2"]
+shape = SubResource("Shape_malt")
+
+[node name="Label3D" type="Label3D" parent="Ingredients/MaltPortion2"]
+visible = false
+position = Vector3(0, 0.55, 0)
+billboard = 1
+text = "Солод"
+font_size = 30
+outline_size = 6
+
+[node name="Hops" type="RigidBody3D" parent="Ingredients" groups=["brew_ingredient"]]
+position = Vector3(-1.81, 1.13, 0.75)
+mass = 0.6
+collision_layer = 2
+collision_mask = 1
+continuous_cd = true
+freeze = true
+metadata/ingredient_id = "hops"
+metadata/ingredient_name = "Хмель"
+
+[node name="Visual" type="MeshInstance3D" parent="Ingredients/Hops"]
+material_override = SubResource("Material_hops")
+mesh = SubResource("Mesh_hops")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ingredients/Hops"]
+shape = SubResource("Shape_hops")
+
+[node name="Label3D" type="Label3D" parent="Ingredients/Hops"]
+visible = false
+position = Vector3(0, 0.55, 0)
+billboard = 1
+text = "Хмель"
+font_size = 30
+outline_size = 6
+
+[node name="Yeast" type="RigidBody3D" parent="Ingredients" groups=["brew_ingredient"]]
+position = Vector3(-1.14, 1.13, 0.75)
+mass = 0.6
+collision_layer = 2
+collision_mask = 1
+continuous_cd = true
+freeze = true
+metadata/ingredient_id = "yeast"
+metadata/ingredient_name = "Дрожжи"
+
+[node name="Visual" type="MeshInstance3D" parent="Ingredients/Yeast"]
+material_override = SubResource("Material_yeast")
+mesh = SubResource("Mesh_yeast")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ingredients/Yeast"]
+shape = SubResource("Shape_yeast")
+
+[node name="Label3D" type="Label3D" parent="Ingredients/Yeast"]
+visible = false
+position = Vector3(0, 0.55, 0)
+billboard = 1
+text = "Дрожжи"
+font_size = 30
+outline_size = 6
+
+[node name="BrewingHUD" type="CanvasLayer" parent="."]
+
+[node name="StatusBackdrop" type="Panel" parent="BrewingHUD"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 620.0
+offset_bottom = 102.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_brew_hud")
+
+[node name="StatusLabel" type="Label" parent="BrewingHUD"]
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 612.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(0.95, 0.96, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 16
+
+[node name="MessageLabel" type="Label" parent="BrewingHUD"]
+offset_left = 18.0
+offset_top = 79.0
+offset_right = 612.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 0.72, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 17
+
+[node name="Crosshair" type="Label" parent="BrewingHUD" groups=["interaction_crosshair"]]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.0
+offset_top = -16.0
+offset_right = 14.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+text = "+"
+
+[node name="InteractionPrompt" type="Label" parent="BrewingHUD" groups=["interaction_prompt"]]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = 30.0
+offset_right = 250.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Style_interaction_prompt")
+text = "E — взаимодействовать"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="BrewingVat/IngredientDetector" to="." method="_on_ingredient_entered"]

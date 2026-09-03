@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://beer_mug.gd" id="1_mug"]
+
+[sub_resource type="StandardMaterial3D" id="Material_glass"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.82, 0.92, 1, 0.26)
+metallic = 0.08
+roughness = 0.14
+
+[sub_resource type="StandardMaterial3D" id="Material_beer"]
+transparency = 1
+albedo_color = Color(1, 0.46, 0.035, 0.86)
+emission_enabled = true
+emission = Color(0.92, 0.24, 0.015, 1)
+emission_energy_multiplier = 0.2
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="Mesh_cup"]
+top_radius = 0.2
+bottom_radius = 0.17
+height = 0.38
+radial_segments = 20
+rings = 4
+cap_top = false
+
+[sub_resource type="TorusMesh" id="Mesh_handle"]
+inner_radius = 0.075
+outer_radius = 0.115
+rings = 16
+ring_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_beer"]
+top_radius = 0.17
+bottom_radius = 0.15
+height = 0.29
+radial_segments = 20
+
+[sub_resource type="CylinderShape3D" id="Shape_mug"]
+radius = 0.245
+height = 0.4
+
+[node name="BeerMug" type="RigidBody3D" groups=["pickup_object", "beer_mug"]]
+mass = 0.7
+collision_layer = 2
+collision_mask = 3
+continuous_cd = true
+freeze = true
+metadata/item_name = "пивная кружка"
+metadata/hold_upright = true
+metadata/release_clearance = 0.28
+script = ExtResource("1_mug")
+
+[node name="Glass" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_cup")
+material_override = SubResource("Material_glass")
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0.225, 0.015, 0)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("Mesh_handle")
+material_override = SubResource("Material_glass")
+
+[node name="Beer" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, -0.02, 0)
+mesh = SubResource("Mesh_beer")
+material_override = SubResource("Material_beer")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_mug")

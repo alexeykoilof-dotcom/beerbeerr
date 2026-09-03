@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://garage_light_switch.gd" id="1_switch"]
+
+[sub_resource type="StandardMaterial3D" id="Material_plate"]
+albedo_color = Color(0.12, 0.15, 0.18, 1)
+metallic = 0.72
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Material_handle"]
+albedo_color = Color(0.92, 0.34, 0.08, 1)
+metallic = 0.18
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="Material_indicator"]
+albedo_color = Color(1, 0.72, 0.22, 1)
+emission_enabled = true
+emission = Color(1, 0.72, 0.22, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+size = Vector3(0.5, 0.78, 0.12)
+
+[sub_resource type="BoxMesh" id="Mesh_handle"]
+size = Vector3(0.12, 0.42, 0.12)
+
+[sub_resource type="SphereMesh" id="Mesh_indicator"]
+radius = 0.065
+height = 0.13
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxShape3D" id="Shape_switch"]
+size = Vector3(0.58, 0.86, 0.2)
+
+[node name="GarageLightSwitch" type="Node3D"]
+editor_description = "Редактируемый выключатель гаража. Перемещайте этот Node3D целиком; Plate, Handle, Indicator и InteractionBody можно менять отдельно."
+
+[node name="Plate" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_plate")
+material_override = SubResource("Material_plate")
+
+[node name="Handle" type="Node3D" parent="."]
+position = Vector3(0, 0, 0.11)
+rotation = Vector3(0, 0, -0.314159)
+
+[node name="Lever" type="MeshInstance3D" parent="Handle"]
+mesh = SubResource("Mesh_handle")
+material_override = SubResource("Material_handle")
+
+[node name="Indicator" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.27, 0.13)
+mesh = SubResource("Mesh_indicator")
+material_override = SubResource("Material_indicator")
+
+[node name="Label" type="Label3D" parent="."]
+position = Vector3(0, 0.56, 0.02)
+text = "СВЕТ"
+font_size = 22
+outline_size = 5
+modulate = Color(1, 0.92, 0.72, 1)
+
+[node name="InteractionBody" type="StaticBody3D" parent="." groups=["interaction_object"]]
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("1_switch")
+
+[node name="Collision" type="CollisionShape3D" parent="InteractionBody"]
+shape = SubResource("Shape_switch")

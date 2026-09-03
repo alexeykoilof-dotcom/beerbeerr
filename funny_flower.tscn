@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/plants/flower_purpleA.glb" id="1_flower_model"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_flower"]
+radius = 0.2
+height = 0.78
+
+[node name="FunnyFlower" type="RigidBody3D" groups=["brew_ingredient", "funny_flower"]]
+mass = 0.18
+collision_layer = 2
+collision_mask = 1
+continuous_cd = true
+linear_damp = 1.2
+angular_damp = 3.5
+metadata/ingredient_id = "funny_flower"
+metadata/ingredient_name = "Цветочек"
+
+[node name="FlowerModel" parent="." instance=ExtResource("1_flower_model")]
+scale = Vector3(1.775, 1.775, 1.775)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.39, 0)
+shape = SubResource("Shape_flower")
+

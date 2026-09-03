@@ -1,0 +1,186 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="PackedScene" path="res://garden_slot.tscn" id="1_slot"]
+[ext_resource type="PackedScene" path="res://garden_seed.tscn" id="2_seed"]
+
+[sub_resource type="StandardMaterial3D" id="Material_soil"]
+albedo_color = Color(0.17, 0.065, 0.018, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.35, 0.16, 0.045, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Material_sign"]
+albedo_color = Color(0.12, 0.31, 0.075, 1)
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="Mesh_bed"]
+size = Vector3(7.8, 0.24, 1.6)
+
+[sub_resource type="BoxMesh" id="Mesh_long_frame"]
+size = Vector3(8.35, 0.32, 0.18)
+
+[sub_resource type="BoxMesh" id="Mesh_end_frame"]
+size = Vector3(0.18, 0.32, 1.62)
+
+[sub_resource type="BoxShape3D" id="Shape_bed"]
+size = Vector3(8.35, 0.34, 1.98)
+
+[sub_resource type="BoxMesh" id="Mesh_table"]
+size = Vector3(3.5, 0.14, 0.86)
+
+[sub_resource type="BoxMesh" id="Mesh_leg"]
+size = Vector3(0.13, 0.75, 0.13)
+
+[sub_resource type="BoxShape3D" id="Shape_table"]
+size = Vector3(3.55, 0.86, 0.9)
+
+[node name="GardenPlot" type="Node3D" groups=["garden_plot", "skip_auto_collision"]]
+editor_description = "Редактируемая грядка на 8 мест. Перемещайте этот Node3D целиком; посадочные ячейки и столик с семенами доступны отдельно."
+
+[node name="Bed" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Soil" type="MeshInstance3D" parent="Bed"]
+position = Vector3(0, 0.05, 0)
+mesh = SubResource("Mesh_bed")
+material_override = SubResource("Material_soil")
+
+[node name="FrontFrame" type="MeshInstance3D" parent="Bed"]
+position = Vector3(0, 0.08, 0.9)
+mesh = SubResource("Mesh_long_frame")
+material_override = SubResource("Material_wood")
+
+[node name="BackFrame" type="MeshInstance3D" parent="Bed"]
+position = Vector3(0, 0.08, -0.9)
+mesh = SubResource("Mesh_long_frame")
+material_override = SubResource("Material_wood")
+
+[node name="LeftFrame" type="MeshInstance3D" parent="Bed"]
+position = Vector3(-4.085, 0.08, 0)
+mesh = SubResource("Mesh_end_frame")
+material_override = SubResource("Material_wood")
+
+[node name="RightFrame" type="MeshInstance3D" parent="Bed"]
+position = Vector3(4.085, 0.08, 0)
+mesh = SubResource("Mesh_end_frame")
+material_override = SubResource("Material_wood")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed"]
+position = Vector3(0, 0.05, 0)
+shape = SubResource("Shape_bed")
+
+[node name="PlantingSlots" type="Node3D" parent="."]
+position = Vector3(0, 0.24, 0)
+
+[node name="Slot01" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(-3.15, 0, 0)
+
+[node name="Slot02" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(-2.25, 0, 0)
+
+[node name="Slot03" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(-1.35, 0, 0)
+
+[node name="Slot04" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(-0.45, 0, 0)
+
+[node name="Slot05" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(0.45, 0, 0)
+
+[node name="Slot06" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(1.35, 0, 0)
+
+[node name="Slot07" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(2.25, 0, 0)
+
+[node name="Slot08" parent="PlantingSlots" instance=ExtResource("1_slot")]
+position = Vector3(3.15, 0, 0)
+
+[node name="SeedTable" type="StaticBody3D" parent="."]
+position = Vector3(0, 0, 2.05)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Top" type="MeshInstance3D" parent="SeedTable"]
+position = Vector3(0, 0.76, 0)
+mesh = SubResource("Mesh_table")
+material_override = SubResource("Material_wood")
+
+[node name="Leg01" type="MeshInstance3D" parent="SeedTable"]
+position = Vector3(-1.5, 0.37, -0.3)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="Leg02" type="MeshInstance3D" parent="SeedTable"]
+position = Vector3(1.5, 0.37, -0.3)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="Leg03" type="MeshInstance3D" parent="SeedTable"]
+position = Vector3(-1.5, 0.37, 0.3)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="Leg04" type="MeshInstance3D" parent="SeedTable"]
+position = Vector3(1.5, 0.37, 0.3)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="Collision" type="CollisionShape3D" parent="SeedTable"]
+position = Vector3(0, 0.4, 0)
+shape = SubResource("Shape_table")
+
+[node name="Label" type="Label3D" parent="SeedTable"]
+position = Vector3(0, 1.35, -0.18)
+billboard = 1
+text = "СЕМЕНА ДЛЯ ГРЯДКИ"
+font_size = 28
+outline_size = 7
+metadata/localization_key = "garden.seed_sign"
+
+[node name="Seeds" type="Node3D" parent="."]
+position = Vector3(0, 0, 2.05)
+
+[node name="Seed01" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(-1.25, 0.97, 0)
+
+[node name="Seed02" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(-0.9, 0.97, 0)
+
+[node name="Seed03" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(-0.55, 0.97, 0)
+
+[node name="Seed04" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(-0.2, 0.97, 0)
+
+[node name="Seed05" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(0.2, 0.97, 0)
+
+[node name="Seed06" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(0.55, 0.97, 0)
+
+[node name="Seed07" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(0.9, 0.97, 0)
+
+[node name="Seed08" parent="Seeds" instance=ExtResource("2_seed")]
+position = Vector3(1.25, 0.97, 0)
+
+[editable path="PlantingSlots/Slot01"]
+[editable path="PlantingSlots/Slot02"]
+[editable path="PlantingSlots/Slot03"]
+[editable path="PlantingSlots/Slot04"]
+[editable path="PlantingSlots/Slot05"]
+[editable path="PlantingSlots/Slot06"]
+[editable path="PlantingSlots/Slot07"]
+[editable path="PlantingSlots/Slot08"]
+[editable path="Seeds/Seed01"]
+[editable path="Seeds/Seed02"]
+[editable path="Seeds/Seed03"]
+[editable path="Seeds/Seed04"]
+[editable path="Seeds/Seed05"]
+[editable path="Seeds/Seed06"]
+[editable path="Seeds/Seed07"]
+[editable path="Seeds/Seed08"]

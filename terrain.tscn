@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://terrain.gd" id="1_terrain"]
+[ext_resource type="Texture2D" path="res://assets/terrain/grass_ground_v1.png" id="2_grass"]
+
+[sub_resource type="StandardMaterial3D" id="Material_terrain"]
+resource_name = "Editable Grass Material"
+cull_mode = 2
+albedo_color = Color(0.58, 0.68, 0.5, 1)
+albedo_texture = ExtResource("2_grass")
+roughness = 0.96
+metallic_specular = 0.22
+
+[sub_resource type="StandardMaterial3D" id="Material_garage_floor"]
+resource_name = "Editable Garage Floor Material"
+cull_mode = 2
+albedo_color = Color(0.26, 0.245, 0.215, 1)
+roughness = 0.92
+metallic_specular = 0.18
+
+[node name="Terrain" type="Node3D"]
+script = ExtResource("1_terrain")
+terrain_material = SubResource("Material_terrain")
+garage_floor_material = SubResource("Material_garage_floor")
+
+[node name="TerrainMesh" type="MeshInstance3D" parent="."]
+
+[node name="TerrainBody" type="StaticBody3D" parent="."]
+
+[node name="TerrainCollision" type="CollisionShape3D" parent="TerrainBody"]

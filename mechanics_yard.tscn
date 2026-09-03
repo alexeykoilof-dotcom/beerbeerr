@@ -1,0 +1,612 @@
+[gd_scene load_steps=23 format=3]
+
+[ext_resource type="Script" path="res://mechanics_yard.gd" id="1_yard"]
+[ext_resource type="Script" path="res://mechanics_station.gd" id="2_station"]
+
+[sub_resource type="StandardMaterial3D" id="MatGround"]
+albedo_color = Color(0.18, 0.24, 0.12, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="MatRaw"]
+albedo_color = Color(0.45, 0.25, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBeer"]
+albedo_color = Color(0.95, 0.58, 0.08, 1)
+emission_enabled = true
+emission = Color(0.8, 0.3, 0.015, 1)
+emission_energy_multiplier = 0.28
+metallic = 0.25
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="MatMoonshine"]
+albedo_color = Color(0.68, 0.76, 0.78, 1)
+metallic = 0.75
+
+[sub_resource type="StandardMaterial3D" id="MatWine"]
+albedo_color = Color(0.38, 0.05, 0.13, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatPackage"]
+albedo_color = Color(0.87, 0.36, 0.08, 1)
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="MatLegal"]
+albedo_color = Color(0.1, 0.55, 0.25, 1)
+emission_enabled = true
+emission = Color(0.025, 0.3, 0.08, 1)
+emission_energy_multiplier = 0.22
+roughness = 0.58
+
+[sub_resource type="StandardMaterial3D" id="MatBlack"]
+albedo_color = Color(0.44, 0.03, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatUpgrade"]
+albedo_color = Color(0.08, 0.36, 0.78, 1)
+emission_enabled = true
+emission = Color(0.02, 0.13, 0.55, 1)
+emission_energy_multiplier = 0.24
+metallic = 0.35
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="MatExperiment"]
+albedo_color = Color(0.58, 0.12, 0.76, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBoard"]
+albedo_color = Color(0.025, 0.035, 0.045, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="MatWhite"]
+albedo_color = Color(0.88, 0.9, 0.92, 1)
+
+[sub_resource type="BoxMesh" id="StationBaseMesh"]
+size = Vector3(2.8, 0.2, 2.5)
+
+[sub_resource type="BoxShape3D" id="StationShape"]
+size = Vector3(2.8, 1.5, 2.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh"]
+size = Vector3(1.2, 1.1, 1.2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh"]
+top_radius = 0.62
+bottom_radius = 0.72
+height = 1.25
+
+[sub_resource type="SphereMesh" id="SphereMesh"]
+radius = 0.66
+height = 1.32
+
+[sub_resource type="CylinderMesh" id="BottleMesh"]
+top_radius = 0.18
+bottom_radius = 0.28
+height = 1.1
+
+[sub_resource type="BoxMesh" id="BoardMesh"]
+size = Vector3(7.2, 4.6, 0.18)
+
+[sub_resource type="BoxShape3D" id="BoardShape"]
+size = Vector3(7.2, 4.6, 0.18)
+
+[sub_resource type="BoxMesh" id="TitleBoardMesh"]
+size = Vector3(10.5, 2.2, 0.18)
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+size = Vector3(0.18, 2.4, 0.18)
+
+[sub_resource type="BoxMesh" id="YardGroundMesh"]
+size = Vector3(14.5, 0.08, 15.0)
+
+[node name="MechanicsYard" type="Node3D" groups=["mechanics_yard"]]
+script = ExtResource("1_yard")
+
+[node name="EditableGround" type="MeshInstance3D" parent="."]
+position = Vector3(-1.5, -0.04, 0)
+mesh = SubResource("YardGroundMesh")
+material_override = SubResource("MatGround")
+
+[node name="ProductionTimers" type="Node" parent="."]
+
+[node name="BeerTimer" type="Timer" parent="ProductionTimers"]
+wait_time = 2.0
+one_shot = true
+
+[node name="MoonshineTimer" type="Timer" parent="ProductionTimers"]
+wait_time = 4.0
+one_shot = true
+
+[node name="WineTimer" type="Timer" parent="ProductionTimers"]
+wait_time = 7.0
+one_shot = true
+
+[node name="TitleBoard" type="Node3D" parent="."]
+position = Vector3(-4, 0, 7)
+
+[node name="Board" type="MeshInstance3D" parent="TitleBoard"]
+position = Vector3(0, 2.8, 0)
+mesh = SubResource("TitleBoardMesh")
+material_override = SubResource("MatBoard")
+
+[node name="LeftPost" type="MeshInstance3D" parent="TitleBoard"]
+position = Vector3(-4.4, 1.2, 0)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatRaw")
+
+[node name="RightPost" type="MeshInstance3D" parent="TitleBoard"]
+position = Vector3(4.4, 1.2, 0)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatRaw")
+
+[node name="Label" type="Label3D" parent="TitleBoard"]
+position = Vector3(0, 2.8, -0.12)
+pixel_size = 0.006
+billboard = 1
+text = "УЧЕБНАЯ ПИВОВАРНЯ\nсклад сырья → варка → упаковка → продажа → улучшения"
+font_size = 40
+outline_size = 12
+
+[node name="RawShop" type="StaticBody3D" parent="."]
+position = Vector3(-8, 0, 4)
+visible = false
+process_mode = 4
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2_station")
+interaction_text = "купить 3 сырья за $20"
+
+[node name="Base" type="MeshInstance3D" parent="RawShop"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatRaw")
+
+[node name="Object" type="MeshInstance3D" parent="RawShop"]
+position = Vector3(0, 0.75, 0)
+mesh = SubResource("BoxMesh")
+material_override = SubResource("MatRaw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RawShop"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="RawShop"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "1. ЗАКУПКА СЫРЬЯ"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="RawShop"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "Деньги → солод / фрукты / сахар\nE: 3 сырья за $20"
+font_size = 24
+outline_size = 8
+
+[node name="Experiment" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(-4, 0, 4)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("2_station")
+action = 5
+interaction_text = "открыть новый пивной рецепт"
+
+[node name="Base" type="MeshInstance3D" parent="Experiment"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatExperiment")
+
+[node name="Object" type="MeshInstance3D" parent="Experiment"]
+position = Vector3(0, 0.85, 0)
+mesh = SubResource("SphereMesh")
+material_override = SubResource("MatExperiment")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Experiment"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Experiment"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "5. ПИВНОЙ РЕЦЕПТ"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Experiment"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "Сырьё + $30 → новый сорт\nРецепт повышает цену пива"
+font_size = 24
+outline_size = 8
+
+[node name="Upgrade" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(0, 0, 4)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("2_station")
+action = 4
+interaction_text = "улучшить оборудование"
+
+[node name="Base" type="MeshInstance3D" parent="Upgrade"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatUpgrade")
+
+[node name="Object" type="MeshInstance3D" parent="Upgrade"]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("BoxMesh")
+material_override = SubResource("MatUpgrade")
+
+[node name="Top" type="MeshInstance3D" parent="Upgrade"]
+position = Vector3(0, 1.45, 0)
+scale = Vector3(0.7, 0.18, 0.7)
+mesh = SubResource("CylinderMesh")
+material_override = SubResource("MatWhite")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Upgrade"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Upgrade"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "6. УЛУЧШЕНИЯ"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Upgrade"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "Деньги → оборудование\nКачество и Tier растут"
+text = "Деньги → оборудование\nКачество растёт, варка быстрее"
+font_size = 24
+outline_size = 8
+
+[node name="Cleaning" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(4, 0, 4)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("2_station")
+action = 6
+interaction_text = "очистить оборудование"
+
+[node name="Base" type="MeshInstance3D" parent="Cleaning"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatWhite")
+
+[node name="Object" type="MeshInstance3D" parent="Cleaning"]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("CylinderMesh")
+material_override = SubResource("MatWhite")
+
+[node name="Top" type="MeshInstance3D" parent="Cleaning"]
+position = Vector3(0, 1.42, 0)
+scale = Vector3(0.55, 0.22, 0.55)
+mesh = SubResource("SphereMesh")
+material_override = SubResource("MatUpgrade")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cleaning"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Cleaning"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "7. ОЧИСТКА"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Cleaning"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "$5 → чистота 100%\nГрязь снижает цену продукта"
+font_size = 24
+outline_size = 8
+
+[node name="Beer" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(-8, 0, 0)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("2_station")
+action = 1
+interaction_text = "сварить пиво"
+
+[node name="Base" type="MeshInstance3D" parent="Beer"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatBeer")
+
+[node name="Object" type="MeshInstance3D" parent="Beer"]
+position = Vector3(0, 0.82, 0)
+mesh = SubResource("CylinderMesh")
+material_override = SubResource("MatBeer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Beer"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Beer"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "2. ПИВО"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Beer"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "1 сырьё → варка 2 сек.\nБыстро, дёшево, легально"
+font_size = 24
+outline_size = 8
+
+[node name="Moonshine" type="StaticBody3D" parent="."]
+position = Vector3(-4, 0, 0)
+visible = false
+process_mode = 4
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2_station")
+action = 2
+interaction_text = "выгнать самогон"
+
+[node name="Base" type="MeshInstance3D" parent="Moonshine"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatMoonshine")
+
+[node name="Object" type="MeshInstance3D" parent="Moonshine"]
+position = Vector3(-0.25, 0.82, 0)
+mesh = SubResource("CylinderMesh")
+material_override = SubResource("MatMoonshine")
+
+[node name="Pipe" type="MeshInstance3D" parent="Moonshine"]
+position = Vector3(0.55, 1.25, 0)
+rotation = Vector3(0, 0, 1.5708)
+scale = Vector3(0.16, 0.85, 0.16)
+mesh = SubResource("CylinderMesh")
+material_override = SubResource("MatMoonshine")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Moonshine"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Moonshine"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "3. САМОГОН"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Moonshine"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "1 сырьё → перегонка 4 сек.\nДорого, но растёт риск"
+font_size = 24
+outline_size = 8
+
+[node name="Wine" type="StaticBody3D" parent="."]
+position = Vector3(0, 0, 0)
+visible = false
+process_mode = 4
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2_station")
+action = 3
+interaction_text = "поставить вино"
+
+[node name="Base" type="MeshInstance3D" parent="Wine"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatWine")
+
+[node name="Object" type="MeshInstance3D" parent="Wine"]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("BoxMesh")
+material_override = SubResource("MatWine")
+
+[node name="Bottle" type="MeshInstance3D" parent="Wine"]
+position = Vector3(0, 1.5, 0)
+mesh = SubResource("BottleMesh")
+material_override = SubResource("MatWine")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wine"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Wine"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "4. ВИНО"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Wine"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "1 сырьё → выдержка 7 сек.\nДолго, но легально и дороже"
+font_size = 24
+outline_size = 8
+
+[node name="Packaging" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(-8, 0, -4)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("2_station")
+action = 2
+interaction_text = "разлить пиво по бутылкам"
+
+[node name="Base" type="MeshInstance3D" parent="Packaging"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatPackage")
+
+[node name="Object" type="MeshInstance3D" parent="Packaging"]
+position = Vector3(-0.35, 0.72, 0)
+mesh = SubResource("BoxMesh")
+material_override = SubResource("MatPackage")
+
+[node name="Bottle" type="MeshInstance3D" parent="Packaging"]
+position = Vector3(0.55, 0.78, 0)
+mesh = SubResource("BottleMesh")
+material_override = SubResource("MatWhite")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Packaging"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="Packaging"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "3. УПАКОВКА ПИВА"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="Packaging"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "Готовое пиво + $2 → бутылка\nБез тары продавать нельзя"
+font_size = 24
+outline_size = 8
+
+[node name="LegalMarket" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(-4, 0, -4)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("2_station")
+action = 3
+interaction_text = "продать бутылку пива"
+
+[node name="Base" type="MeshInstance3D" parent="LegalMarket"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatLegal")
+
+[node name="Object" type="MeshInstance3D" parent="LegalMarket"]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("BoxMesh")
+material_override = SubResource("MatLegal")
+
+[node name="Bottle" type="MeshInstance3D" parent="LegalMarket"]
+position = Vector3(0, 1.5, 0)
+mesh = SubResource("BottleMesh")
+material_override = SubResource("MatWhite")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LegalMarket"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="LegalMarket"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "4. ПРОДАЖА ПИВА"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="LegalMarket"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "Бутылка пива → деньги\nЦена зависит от качества"
+font_size = 24
+outline_size = 8
+
+[node name="BlackMarket" type="StaticBody3D" parent="."]
+position = Vector3(0, 0, -4)
+visible = false
+process_mode = 4
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2_station")
+action = 6
+interaction_text = "продать самогон"
+
+[node name="Base" type="MeshInstance3D" parent="BlackMarket"]
+position = Vector3(0, 0.1, 0)
+mesh = SubResource("StationBaseMesh")
+material_override = SubResource("MatBlack")
+
+[node name="Object" type="MeshInstance3D" parent="BlackMarket"]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("BoxMesh")
+material_override = SubResource("MatBlack")
+
+[node name="Bottle" type="MeshInstance3D" parent="BlackMarket"]
+position = Vector3(0, 1.5, 0)
+mesh = SubResource("BottleMesh")
+material_override = SubResource("MatMoonshine")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BlackMarket"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("StationShape")
+
+[node name="Title" type="Label3D" parent="BlackMarket"]
+position = Vector3(0, 2.35, 0)
+pixel_size = 0.007
+billboard = 1
+text = "7. ЧЁРНЫЙ РЫНОК"
+font_size = 32
+outline_size = 10
+
+[node name="Explanation" type="Label3D" parent="BlackMarket"]
+position = Vector3(0, 1.82, 0)
+pixel_size = 0.006
+billboard = 1
+text = "Самогон → много денег + риск\n100 риска = облава и штраф"
+font_size = 24
+outline_size = 8
+
+[node name="StateBoard" type="StaticBody3D" parent="."]
+position = Vector3(5.2, 0, 0)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Board" type="MeshInstance3D" parent="StateBoard"]
+position = Vector3(0, 2.45, 0)
+mesh = SubResource("BoardMesh")
+material_override = SubResource("MatBoard")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StateBoard"]
+position = Vector3(0, 2.45, 0)
+shape = SubResource("BoardShape")
+
+[node name="LeftPost" type="MeshInstance3D" parent="StateBoard"]
+position = Vector3(-2.8, 1.2, 0)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatRaw")
+
+[node name="RightPost" type="MeshInstance3D" parent="StateBoard"]
+position = Vector3(2.8, 1.2, 0)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatRaw")
+
+[node name="StateLabel" type="Label3D" parent="StateBoard"]
+position = Vector3(0, 2.65, -0.12)
+pixel_size = 0.005
+billboard = 1
+text = "СОСТОЯНИЕ БИЗНЕСА"
+font_size = 28
+outline_size = 8
+
+[node name="MessageLabel" type="Label3D" parent="StateBoard"]
+position = Vector3(0, 0.48, -0.12)
+pixel_size = 0.005
+billboard = 1
+modulate = Color(1, 0.82, 0.25, 1)
+text = "Подсказка появится здесь"
+font_size = 25
+outline_size = 8

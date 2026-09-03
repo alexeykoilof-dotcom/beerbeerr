@@ -1,0 +1,89 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://water_bucket.gd" id="1_bucket"]
+
+[sub_resource type="StandardMaterial3D" id="Material_bucket"]
+resource_name = "Ведро — оцинкованный металл"
+albedo_color = Color(0.34, 0.4, 0.43, 1)
+metallic = 0.72
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Material_rim"]
+resource_name = "Ведро — тёмный обод"
+albedo_color = Color(0.055, 0.075, 0.08, 1)
+metallic = 0.82
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Material_water"]
+resource_name = "Чистая вода в ведре"
+transparency = 1
+albedo_color = Color(0.12, 0.48, 0.92, 0.72)
+emission_enabled = true
+emission = Color(0.02, 0.16, 0.42, 1)
+emission_energy_multiplier = 0.28
+roughness = 0.12
+
+[sub_resource type="CylinderMesh" id="Mesh_bucket"]
+top_radius = 0.34
+bottom_radius = 0.27
+height = 0.52
+radial_segments = 20
+rings = 3
+cap_top = false
+
+[sub_resource type="TorusMesh" id="Mesh_rim"]
+inner_radius = 0.31
+outer_radius = 0.355
+rings = 20
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="Mesh_water"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 0.025
+radial_segments = 20
+
+[sub_resource type="CylinderShape3D" id="Shape_bucket"]
+radius = 0.36
+height = 0.54
+
+[node name="WaterBucketSetup" type="Node3D"]
+editor_description = "Двигайте этот Node3D, чтобы расставить ведро. Физический переносимый предмет и все его детали раскрываются в дочернем узле Bucket."
+
+[node name="Bucket" type="RigidBody3D" parent="." groups=["pickup_object", "water_bucket"]]
+mass = 1.1
+collision_layer = 2
+collision_mask = 3
+continuous_cd = true
+freeze = true
+metadata/item_name = "пустое ведро"
+metadata/hold_upright = true
+metadata/release_clearance = 0.38
+script = ExtResource("1_bucket")
+
+[node name="Body" type="MeshInstance3D" parent="Bucket"]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("Mesh_bucket")
+material_override = SubResource("Material_bucket")
+
+[node name="Rim" type="MeshInstance3D" parent="Bucket"]
+position = Vector3(0, 0.54, 0)
+mesh = SubResource("Mesh_rim")
+material_override = SubResource("Material_rim")
+
+[node name="Handle" type="MeshInstance3D" parent="Bucket"]
+position = Vector3(0, 0.73, 0)
+rotation = Vector3(0, 0, 1.570796)
+scale = Vector3(1.35, 1.35, 1.35)
+mesh = SubResource("Mesh_rim")
+material_override = SubResource("Material_rim")
+
+[node name="Water" type="MeshInstance3D" parent="Bucket"]
+visible = false
+position = Vector3(0, 0.505, 0)
+mesh = SubResource("Mesh_water")
+material_override = SubResource("Material_water")
+
+[node name="Collision" type="CollisionShape3D" parent="Bucket"]
+position = Vector3(0, 0.28, 0)
+shape = SubResource("Shape_bucket")

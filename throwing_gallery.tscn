@@ -1,0 +1,181 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://throwing_gallery.gd" id="1_gallery"]
+
+[sub_resource type="StandardMaterial3D" id="Material_metal"]
+albedo_color = Color(0.12, 0.16, 0.19, 1)
+metallic = 0.68
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.34, 0.18, 0.08, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Material_orange"]
+albedo_color = Color(0.95, 0.32, 0.07, 1)
+metallic = 0.12
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Material_cream"]
+albedo_color = Color(0.95, 0.82, 0.48, 1)
+roughness = 0.48
+
+[sub_resource type="BoxMesh" id="Mesh_table"]
+size = Vector3(4.6, 0.2, 1.45)
+
+[sub_resource type="BoxShape3D" id="Shape_table"]
+size = Vector3(4.6, 0.2, 1.45)
+
+[sub_resource type="BoxMesh" id="Mesh_leg"]
+size = Vector3(0.18, 1.4, 0.18)
+
+[sub_resource type="BoxShape3D" id="Shape_leg"]
+size = Vector3(0.18, 1.4, 0.18)
+
+[sub_resource type="BoxMesh" id="Mesh_backboard"]
+size = Vector3(4.8, 1.65, 0.16)
+
+[sub_resource type="BoxShape3D" id="Shape_backboard"]
+size = Vector3(4.8, 1.65, 0.16)
+
+[sub_resource type="CylinderMesh" id="Mesh_target"]
+top_radius = 0.24
+bottom_radius = 0.3
+height = 0.75
+radial_segments = 16
+
+[sub_resource type="CylinderShape3D" id="Shape_target"]
+radius = 0.3
+height = 0.75
+
+[sub_resource type="CylinderMesh" id="Mesh_button"]
+top_radius = 0.24
+bottom_radius = 0.24
+height = 0.16
+radial_segments = 16
+
+[sub_resource type="CylinderShape3D" id="Shape_button"]
+radius = 0.3
+height = 0.22
+
+[node name="ThrowingGallery" type="Node3D" groups=["throwing_gallery"]]
+editor_description = "Редактируемый физический тир. Двигайте корень целиком или отдельно стол, мишени, кнопку сброса и свет результата."
+
+[node name="Table" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 3
+
+[node name="Top" type="MeshInstance3D" parent="Table"]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("Mesh_table")
+material_override = SubResource("Material_wood")
+
+[node name="TopCollision" type="CollisionShape3D" parent="Table"]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("Shape_table")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="Table"]
+position = Vector3(-1.9, 0.35, 0)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_metal")
+
+[node name="LeftLegCollision" type="CollisionShape3D" parent="Table"]
+position = Vector3(-1.9, 0.35, 0)
+shape = SubResource("Shape_leg")
+
+[node name="RightLeg" type="MeshInstance3D" parent="Table"]
+position = Vector3(1.9, 0.35, 0)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_metal")
+
+[node name="RightLegCollision" type="CollisionShape3D" parent="Table"]
+position = Vector3(1.9, 0.35, 0)
+shape = SubResource("Shape_leg")
+
+[node name="Backboard" type="MeshInstance3D" parent="Table"]
+position = Vector3(0, 1.55, -0.66)
+mesh = SubResource("Mesh_backboard")
+material_override = SubResource("Material_metal")
+
+[node name="BackboardCollision" type="CollisionShape3D" parent="Table"]
+position = Vector3(0, 1.55, -0.66)
+shape = SubResource("Shape_backboard")
+
+[node name="Targets" type="Node3D" parent="."]
+
+[node name="TargetLeft" type="RigidBody3D" parent="Targets" groups=["gallery_target"]]
+position = Vector3(-1.15, 1.275, 0)
+mass = 0.7
+collision_layer = 2
+collision_mask = 3
+continuous_cd = true
+
+[node name="Visual" type="MeshInstance3D" parent="Targets/TargetLeft"]
+mesh = SubResource("Mesh_target")
+material_override = SubResource("Material_orange")
+
+[node name="Collision" type="CollisionShape3D" parent="Targets/TargetLeft"]
+shape = SubResource("Shape_target")
+
+[node name="TargetCenter" type="RigidBody3D" parent="Targets" groups=["gallery_target"]]
+position = Vector3(0, 1.275, 0)
+mass = 0.7
+collision_layer = 2
+collision_mask = 3
+continuous_cd = true
+
+[node name="Visual" type="MeshInstance3D" parent="Targets/TargetCenter"]
+mesh = SubResource("Mesh_target")
+material_override = SubResource("Material_cream")
+
+[node name="Collision" type="CollisionShape3D" parent="Targets/TargetCenter"]
+shape = SubResource("Shape_target")
+
+[node name="TargetRight" type="RigidBody3D" parent="Targets" groups=["gallery_target"]]
+position = Vector3(1.15, 1.275, 0)
+mass = 0.7
+collision_layer = 2
+collision_mask = 3
+continuous_cd = true
+
+[node name="Visual" type="MeshInstance3D" parent="Targets/TargetRight"]
+mesh = SubResource("Mesh_target")
+material_override = SubResource("Material_orange")
+
+[node name="Collision" type="CollisionShape3D" parent="Targets/TargetRight"]
+shape = SubResource("Shape_target")
+
+[node name="ResetButton" type="StaticBody3D" parent="." groups=["interaction_object"]]
+position = Vector3(2.0, 1.03, 0.34)
+rotation = Vector3(1.570796, 0, 0)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("1_gallery")
+
+[node name="Visual" type="MeshInstance3D" parent="ResetButton"]
+mesh = SubResource("Mesh_button")
+material_override = SubResource("Material_orange")
+
+[node name="Collision" type="CollisionShape3D" parent="ResetButton"]
+shape = SubResource("Shape_button")
+
+[node name="ButtonLabel" type="Label3D" parent="."]
+position = Vector3(2.0, 1.35, 0.28)
+text = "СБРОС"
+font_size = 24
+outline_size = 6
+modulate = Color(1, 0.82, 0.5, 1)
+
+[node name="StatusLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.05, -0.55)
+text = "СБЕЙ 3 МИШЕНИ"
+font_size = 34
+outline_size = 8
+modulate = Color(1, 0.86, 0.48, 1)
+
+[node name="StatusLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 2.15, 0.15)
+light_color = Color(1, 0.55, 0.16, 1)
+light_energy = 0.65
+omni_range = 3.8
+

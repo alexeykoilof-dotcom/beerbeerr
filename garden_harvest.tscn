@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/brewing/wheat_model.glb" id="1_malt_model"]
+
+[sub_resource type="BoxShape3D" id="Shape_harvest"]
+size = Vector3(0.62, 0.42, 0.62)
+
+[node name="GardenHarvest" type="RigidBody3D" groups=["brew_ingredient", "garden_harvest", "pickup_object"]]
+mass = 0.6
+collision_layer = 2
+collision_mask = 3
+continuous_cd = true
+metadata/item_key = "ingredient.malt"
+metadata/item_name = "Солод"
+metadata/ingredient_key = "ingredient.malt"
+metadata/ingredient_id = "malt"
+metadata/ingredient_name = "Солод"
+metadata/release_clearance = 0.34
+
+[node name="Visual" type="Node3D" parent="."]
+editor_description = "Та же редактируемая модель солода, которая используется у ингредиентов возле чана."
+
+[node name="MaltModel" parent="Visual" instance=ExtResource("1_malt_model")]
+position = Vector3(0.321805, 0.00864, -0.029439)
+scale = Vector3(0.23, 0.23, 0.23)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_harvest")

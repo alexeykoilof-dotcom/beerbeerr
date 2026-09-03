@@ -1,0 +1,225 @@
+[gd_scene load_steps=14 format=3]
+
+; Вся фирменная графика гаража собрана в отдельной сцене.
+; Двигай корень BeerGarageIdentity, чтобы перенести вывеску и дорожные огни вместе.
+
+[sub_resource type="StandardMaterial3D" id="Material_dark_green"]
+resource_name = "BEER BEER — тёмно-зелёный металл"
+albedo_color = Color(0.018, 0.105, 0.078, 1)
+metallic = 0.58
+roughness = 0.34
+
+[sub_resource type="StandardMaterial3D" id="Material_amber"]
+resource_name = "BEER BEER — янтарное свечение"
+albedo_color = Color(1, 0.36, 0.025, 1)
+emission_enabled = true
+emission = Color(1, 0.19, 0.008, 1)
+emission_energy_multiplier = 2.8
+roughness = 0.28
+
+[sub_resource type="StandardMaterial3D" id="Material_cream"]
+resource_name = "BEER BEER — светлая пена"
+albedo_color = Color(1, 0.9, 0.64, 1)
+emission_enabled = true
+emission = Color(1, 0.56, 0.18, 1)
+emission_energy_multiplier = 1.8
+roughness = 0.52
+
+[sub_resource type="StandardMaterial3D" id="Material_hops"]
+resource_name = "BEER BEER — хмель"
+albedo_color = Color(0.24, 0.61, 0.13, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="Mesh_sign_back"]
+size = Vector3(6, 1.9, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_sign_face"]
+size = Vector3(5.7, 1.6, 0.12)
+
+[sub_resource type="CylinderMesh" id="Mesh_post"]
+top_radius = 0.1
+bottom_radius = 0.14
+height = 4.5
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="Mesh_mug"]
+top_radius = 0.58
+bottom_radius = 0.48
+height = 1.25
+radial_segments = 24
+rings = 4
+cap_top = false
+
+[sub_resource type="TorusMesh" id="Mesh_handle"]
+inner_radius = 0.22
+outer_radius = 0.34
+rings = 20
+ring_segments = 12
+
+[sub_resource type="SphereMesh" id="Mesh_foam"]
+radius = 0.29
+height = 0.58
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SphereMesh" id="Mesh_hop"]
+radius = 0.16
+height = 0.32
+radial_segments = 10
+rings = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_path_light"]
+top_radius = 0.11
+bottom_radius = 0.15
+height = 0.58
+radial_segments = 10
+
+[sub_resource type="TorusMesh" id="Mesh_path_ring"]
+inner_radius = 0.18
+outer_radius = 0.24
+rings = 12
+ring_segments = 8
+
+[node name="BeerGarageIdentity" type="Node3D" groups=["skip_auto_collision"]]
+
+[node name="GarageSign" type="Node3D" parent="."]
+position = Vector3(0, 4.75, 5.8)
+
+[node name="LeftPost" type="MeshInstance3D" parent="GarageSign"]
+position = Vector3(-2.55, -2.25, 0)
+mesh = SubResource("Mesh_post")
+material_override = SubResource("Material_dark_green")
+
+[node name="RightPost" type="MeshInstance3D" parent="GarageSign"]
+position = Vector3(2.55, -2.25, 0)
+mesh = SubResource("Mesh_post")
+material_override = SubResource("Material_dark_green")
+
+[node name="AmberBack" type="MeshInstance3D" parent="GarageSign"]
+position = Vector3(0, 0, -0.06)
+mesh = SubResource("Mesh_sign_back")
+material_override = SubResource("Material_amber")
+
+[node name="GreenFace" type="MeshInstance3D" parent="GarageSign"]
+position = Vector3(0, 0, 0.08)
+mesh = SubResource("Mesh_sign_face")
+material_override = SubResource("Material_dark_green")
+
+[node name="Title" type="Label3D" parent="GarageSign"]
+position = Vector3(0, 0.18, 0.17)
+pixel_size = 0.0055
+modulate = Color(1, 0.82, 0.38, 1)
+outline_modulate = Color(0.14, 0.045, 0.006, 1)
+text = "BEER BEER"
+font_size = 132
+outline_size = 18
+
+[node name="Subtitle" type="Label3D" parent="GarageSign"]
+position = Vector3(0, -0.5, 0.17)
+pixel_size = 0.004
+modulate = Color(0.8, 0.94, 0.72, 1)
+outline_modulate = Color(0.015, 0.08, 0.055, 1)
+text = "ГАРАЖНАЯ ПИВОВАРНЯ"
+font_size = 58
+outline_size = 12
+
+; Большая кружка над вывеской — силуэт, который читается даже издалека.
+[node name="MugLandmark" type="Node3D" parent="GarageSign"]
+position = Vector3(0, 1.55, 0)
+
+[node name="Cup" type="MeshInstance3D" parent="GarageSign/MugLandmark"]
+mesh = SubResource("Mesh_mug")
+material_override = SubResource("Material_amber")
+
+[node name="Handle" type="MeshInstance3D" parent="GarageSign/MugLandmark"]
+position = Vector3(0.61, 0, 0)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("Mesh_handle")
+material_override = SubResource("Material_amber")
+
+[node name="FoamLeft" type="MeshInstance3D" parent="GarageSign/MugLandmark"]
+position = Vector3(-0.3, 0.66, 0)
+mesh = SubResource("Mesh_foam")
+material_override = SubResource("Material_cream")
+
+[node name="FoamCenter" type="MeshInstance3D" parent="GarageSign/MugLandmark"]
+position = Vector3(0, 0.73, 0)
+scale = Vector3(1.12, 1.12, 1.12)
+mesh = SubResource("Mesh_foam")
+material_override = SubResource("Material_cream")
+
+[node name="FoamRight" type="MeshInstance3D" parent="GarageSign/MugLandmark"]
+position = Vector3(0.3, 0.66, 0)
+mesh = SubResource("Mesh_foam")
+material_override = SubResource("Material_cream")
+
+[node name="HopLeft" type="MeshInstance3D" parent="GarageSign"]
+position = Vector3(-2.25, -0.5, 0.2)
+rotation = Vector3(0, 0, -0.45)
+mesh = SubResource("Mesh_hop")
+material_override = SubResource("Material_hops")
+
+[node name="HopRight" type="MeshInstance3D" parent="GarageSign"]
+position = Vector3(2.25, -0.5, 0.2)
+rotation = Vector3(0, 0, 0.45)
+mesh = SubResource("Mesh_hop")
+material_override = SubResource("Material_hops")
+
+[node name="SignGlow" type="OmniLight3D" parent="GarageSign"]
+position = Vector3(0, 0.5, 1.25)
+light_color = Color(1, 0.43, 0.12, 1)
+light_energy = 2.4
+light_indirect_energy = 0.35
+light_volumetric_fog_energy = 1.6
+omni_range = 8.5
+shadow_enabled = true
+shadow_opacity = 0.35
+
+; Три одинаковых маркера визуально ведут игрока от стартовой дороги к гаражу.
+[node name="PathLights" type="Node3D" parent="."]
+
+[node name="MarkerNear" type="Node3D" parent="PathLights"]
+position = Vector3(-4.8, 0.28, 3.6)
+
+[node name="Body" type="MeshInstance3D" parent="PathLights/MarkerNear"]
+mesh = SubResource("Mesh_path_light")
+material_override = SubResource("Material_dark_green")
+
+[node name="Ring" type="MeshInstance3D" parent="PathLights/MarkerNear"]
+position = Vector3(0, 0.29, 0)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("Mesh_path_ring")
+material_override = SubResource("Material_amber")
+
+[node name="MarkerMiddle" type="Node3D" parent="PathLights"]
+position = Vector3(-10.5, 0.28, 7.1)
+
+[node name="Body" type="MeshInstance3D" parent="PathLights/MarkerMiddle"]
+mesh = SubResource("Mesh_path_light")
+material_override = SubResource("Material_dark_green")
+
+[node name="Ring" type="MeshInstance3D" parent="PathLights/MarkerMiddle"]
+position = Vector3(0, 0.29, 0)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("Mesh_path_ring")
+material_override = SubResource("Material_amber")
+
+[node name="MarkerFar" type="Node3D" parent="PathLights"]
+position = Vector3(-16.2, 0.28, 10.4)
+
+[node name="Body" type="MeshInstance3D" parent="PathLights/MarkerFar"]
+mesh = SubResource("Mesh_path_light")
+material_override = SubResource("Material_dark_green")
+
+[node name="Ring" type="MeshInstance3D" parent="PathLights/MarkerFar"]
+position = Vector3(0, 0.29, 0)
+rotation = Vector3(1.570796, 0, 0)
+mesh = SubResource("Mesh_path_ring")
+material_override = SubResource("Material_amber")
+
+[node name="PathGlow" type="OmniLight3D" parent="PathLights"]
+position = Vector3(-10.5, 0.75, 7.1)
+light_color = Color(1, 0.33, 0.07, 1)
+light_energy = 1.15
+light_volumetric_fog_energy = 1.2
+omni_range = 7.5

@@ -1,0 +1,370 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://game_ui.gd" id="1_ui"]
+[ext_resource type="Script" path="res://inventory_slot.gd" id="2_slot"]
+
+[sub_resource type="Shader" id="Shader_blur"]
+code = "shader_type canvas_item;\nuniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;\nuniform float blur_strength = 2.4;\nvoid fragment() {\n\tvec4 blurred = textureLod(screen_texture, SCREEN_UV, blur_strength);\n\tCOLOR = vec4(blurred.rgb, 0.94);\n}"
+
+[sub_resource type="ShaderMaterial" id="Material_blur"]
+shader = SubResource("Shader_blur")
+
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+bg_color = Color(1, 1, 1, 0.035)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.58)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_menu_button"]
+bg_color = Color(1, 1, 1, 0.025)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.42)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="GameUI" type="CanvasLayer" groups=["inventory_ui"]]
+process_mode = 3
+layer = 40
+script = ExtResource("1_ui")
+
+[node name="Hotbar" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -142.0
+offset_top = -78.0
+offset_right = 142.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Slots" type="HBoxContainer" parent="Hotbar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Slot1" type="Button" parent="Hotbar/Slots"]
+custom_minimum_size = Vector2(64, 58)
+layout_mode = 2
+mouse_filter = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "1"
+
+[node name="Slot2" type="Button" parent="Hotbar/Slots"]
+custom_minimum_size = Vector2(64, 58)
+layout_mode = 2
+mouse_filter = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "2"
+
+[node name="Slot3" type="Button" parent="Hotbar/Slots"]
+custom_minimum_size = Vector2(64, 58)
+layout_mode = 2
+mouse_filter = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "3"
+
+[node name="Slot4" type="Button" parent="Hotbar/Slots"]
+custom_minimum_size = Vector2(64, 58)
+layout_mode = 2
+mouse_filter = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "4"
+
+[node name="InventoryOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Blur" type="ColorRect" parent="InventoryOverlay"]
+material = SubResource("Material_blur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Center" type="CenterContainer" parent="InventoryOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="InventoryOverlay/Center"]
+custom_minimum_size = Vector2(388, 356)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Margin" type="MarginContainer" parent="InventoryOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="VBoxContainer" parent="InventoryOverlay/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="InventoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.88)
+theme_override_font_sizes/font_size = 16
+text = "ИНВЕНТАРЬ"
+horizontal_alignment = 1
+
+[node name="ActiveLabel" type="Label" parent="InventoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.48)
+theme_override_font_sizes/font_size = 10
+text = "АКТИВНЫЕ"
+
+[node name="ActiveSlots" type="HBoxContainer" parent="InventoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Slot1" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/ActiveSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "1"
+script = ExtResource("2_slot")
+slot_group = "hotbar"
+
+[node name="Slot2" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/ActiveSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "2"
+script = ExtResource("2_slot")
+slot_group = "hotbar"
+slot_index = 1
+
+[node name="Slot3" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/ActiveSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "3"
+script = ExtResource("2_slot")
+slot_group = "hotbar"
+slot_index = 2
+
+[node name="Slot4" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/ActiveSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+text = "4"
+script = ExtResource("2_slot")
+slot_group = "hotbar"
+slot_index = 3
+
+[node name="StorageLabel" type="Label" parent="InventoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.48)
+theme_override_font_sizes/font_size = 10
+text = "ПРЕДМЕТЫ"
+
+[node name="StorageSlots" type="GridContainer" parent="InventoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="Slot1" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+
+[node name="Slot2" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 1
+
+[node name="Slot3" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 2
+
+[node name="Slot4" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 3
+
+[node name="Slot5" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 4
+
+[node name="Slot6" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 5
+
+[node name="Slot7" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 6
+
+[node name="Slot8" type="Button" parent="InventoryOverlay/Center/Panel/Margin/Content/StorageSlots"]
+custom_minimum_size = Vector2(76, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 11
+script = ExtResource("2_slot")
+slot_index = 7
+
+[node name="PauseOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Blur" type="ColorRect" parent="PauseOverlay"]
+material = SubResource("Material_blur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Center" type="CenterContainer" parent="PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="PauseOverlay/Center"]
+custom_minimum_size = Vector2(320, 274)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Margin" type="MarginContainer" parent="PauseOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="Content" type="VBoxContainer" parent="PauseOverlay/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="PauseOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.92)
+theme_override_font_sizes/font_size = 20
+text = "ПАУЗА"
+horizontal_alignment = 1
+
+[node name="LanguageRow" type="HBoxContainer" parent="PauseOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Label" type="Label" parent="PauseOverlay/Center/Panel/Margin/Content/LanguageRow"]
+custom_minimum_size = Vector2(82, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.58)
+theme_override_font_sizes/font_size = 11
+text = "ЯЗЫК"
+vertical_alignment = 1
+
+[node name="Selector" type="OptionButton" parent="PauseOverlay/Center/Panel/Margin/Content/LanguageRow"]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.84)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("Style_menu_button")
+theme_override_styles/hover = SubResource("Style_panel")
+theme_override_styles/pressed = SubResource("Style_panel")
+
+[node name="Resume" type="Button" parent="PauseOverlay/Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.84)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Style_menu_button")
+theme_override_styles/hover = SubResource("Style_panel")
+theme_override_styles/pressed = SubResource("Style_panel")
+text = "ПРОДОЛЖИТЬ"
+
+[node name="Quit" type="Button" parent="PauseOverlay/Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.58)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Style_menu_button")
+theme_override_styles/hover = SubResource("Style_panel")
+theme_override_styles/pressed = SubResource("Style_panel")
+text = "ВЫЙТИ ИЗ ИГРЫ"

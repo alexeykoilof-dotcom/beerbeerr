@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://player_hands.gd" id="1_hands"]
+
+[sub_resource type="StandardMaterial3D" id="Material_sleeve"]
+resource_name = "Материал рукавов"
+no_depth_test = true
+albedo_color = Color(0.105, 0.16, 0.19, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="Material_skin"]
+resource_name = "Материал кожи"
+no_depth_test = true
+albedo_color = Color(0.78, 0.49, 0.32, 1)
+roughness = 0.78
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_forearm"]
+material = SubResource("Material_sleeve")
+radius = 0.09
+height = 0.52
+radial_segments = 10
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_hand"]
+material = SubResource("Material_skin")
+radius = 0.115
+height = 0.2
+radial_segments = 10
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_thumb"]
+material = SubResource("Material_skin")
+radius = 0.035
+height = 0.13
+radial_segments = 8
+rings = 3
+
+[node name="PlayerHands" type="Node3D"]
+script = ExtResource("1_hands")
+
+[node name="LeftArm" type="Node3D" parent="."]
+position = Vector3(-0.255, -0.015, 0.04)
+rotation = Vector3(-1.0821, 0.0, -0.139626)
+
+[node name="Sleeve" type="MeshInstance3D" parent="LeftArm"]
+mesh = SubResource("CapsuleMesh_forearm")
+cast_shadow = 0
+
+[node name="Hand" type="MeshInstance3D" parent="LeftArm"]
+position = Vector3(0, 0.295, 0)
+scale = Vector3(0.9, 1, 1.18)
+mesh = SubResource("SphereMesh_hand")
+cast_shadow = 0
+
+[node name="Thumb" type="MeshInstance3D" parent="LeftArm"]
+position = Vector3(0.095, 0.285, -0.015)
+rotation = Vector3(0, 0, -0.75)
+mesh = SubResource("CapsuleMesh_thumb")
+cast_shadow = 0
+
+[node name="RightArm" type="Node3D" parent="."]
+position = Vector3(0.255, -0.015, 0.04)
+rotation = Vector3(-1.0821, 0.0, 0.139626)
+
+[node name="Sleeve" type="MeshInstance3D" parent="RightArm"]
+mesh = SubResource("CapsuleMesh_forearm")
+cast_shadow = 0
+
+[node name="Hand" type="MeshInstance3D" parent="RightArm"]
+position = Vector3(0, 0.295, 0)
+scale = Vector3(0.9, 1, 1.18)
+mesh = SubResource("SphereMesh_hand")
+cast_shadow = 0
+
+[node name="Thumb" type="MeshInstance3D" parent="RightArm"]
+position = Vector3(-0.095, 0.285, -0.015)
+rotation = Vector3(0, 0, 0.75)
+mesh = SubResource("CapsuleMesh_thumb")
+cast_shadow = 0

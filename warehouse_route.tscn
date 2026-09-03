@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://warehouse_route.gd" id="1_route"]
+
+[sub_resource type="StandardMaterial3D" id="MatRoad"]
+resource_name = "Editable Warehouse Road Asphalt"
+albedo_color = Color(0.115, 0.12, 0.125, 1)
+roughness = 0.94
+
+[sub_resource type="StandardMaterial3D" id="MatLine"]
+resource_name = "Editable Road Edge Line"
+albedo_color = Color(0.92, 0.88, 0.7, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="MatShoulder"]
+resource_name = "Editable Gravel Shoulder"
+albedo_color = Color(0.32, 0.28, 0.22, 1)
+roughness = 1.0
+
+[node name="WarehouseRoute" type="Node3D" groups=["warehouse_route"]]
+script = ExtResource("1_route")
+road_material = SubResource("MatRoad")
+line_material = SubResource("MatLine")
+shoulder_material = SubResource("MatShoulder")
+
+[node name="Shoulders" type="MeshInstance3D" parent="."]
+
+[node name="RoadSurface" type="MeshInstance3D" parent="."]
+
+[node name="LeftEdgeLine" type="MeshInstance3D" parent="."]
+
+[node name="RightEdgeLine" type="MeshInstance3D" parent="."]
+
+[node name="RoadBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="RoadBody"]

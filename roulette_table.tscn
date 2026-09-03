@@ -1,0 +1,764 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://roulette_table.gd" id="1_table"]
+[ext_resource type="ArrayMesh" path="res://assets/casino/roulettewheel2.obj" id="2_source_mesh"]
+[ext_resource type="Script" path="res://roulette_bet.gd" id="3_bet"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+resource_name = "Editable Dark Wood"
+albedo_color = Color(0.16, 0.055, 0.022, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Material_trim"]
+resource_name = "Editable Brass Trim"
+albedo_color = Color(0.58, 0.31, 0.075, 1)
+metallic = 0.5
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Material_felt"]
+resource_name = "Editable Green Felt"
+albedo_color = Color(0.025, 0.27, 0.095, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="Material_red"]
+resource_name = "Editable Roulette Red"
+albedo_color = Color(0.72, 0.025, 0.018, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Material_black"]
+resource_name = "Editable Roulette Black"
+albedo_color = Color(0.012, 0.014, 0.018, 1)
+roughness = 0.58
+
+[sub_resource type="StandardMaterial3D" id="Material_zero"]
+resource_name = "Editable Zero Green"
+albedo_color = Color(0.015, 0.62, 0.12, 1)
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="Material_ball"]
+resource_name = "Editable Ivory Ball"
+albedo_color = Color(0.95, 0.9, 0.72, 1)
+metallic_specular = 0.35
+roughness = 0.28
+
+[sub_resource type="BoxMesh" id="Mesh_table_top"]
+size = Vector3(4.6, 0.22, 2)
+
+[sub_resource type="BoxMesh" id="Mesh_apron"]
+size = Vector3(4.3, 0.42, 1.72)
+
+[sub_resource type="BoxMesh" id="Mesh_leg"]
+size = Vector3(0.3, 0.86, 0.3)
+
+[sub_resource type="CylinderMesh" id="Mesh_wheel_outer"]
+top_radius = 0.92
+bottom_radius = 0.92
+height = 0.09
+radial_segments = 64
+rings = 2
+
+[sub_resource type="CylinderMesh" id="Mesh_wheel_inner"]
+top_radius = 0.7
+bottom_radius = 0.7
+height = 0.065
+radial_segments = 64
+rings = 2
+
+[sub_resource type="BoxMesh" id="Mesh_pocket"]
+size = Vector3(0.14, 0.035, 0.25)
+
+[sub_resource type="SphereMesh" id="Mesh_ball"]
+radius = 0.065
+height = 0.13
+radial_segments = 16
+rings = 8
+
+[sub_resource type="BoxMesh" id="Mesh_bet"]
+size = Vector3(0.64, 0.07, 0.64)
+
+[sub_resource type="BoxShape3D" id="Shape_table"]
+size = Vector3(4.6, 1.08, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_bet"]
+size = Vector3(0.64, 0.14, 0.64)
+
+[node name="RouletteTable" type="StaticBody3D"]
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("1_table")
+
+[node name="TableCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.54, 0)
+shape = SubResource("Shape_table")
+
+[node name="TableBase" type="Node3D" parent="."]
+
+[node name="Top" type="MeshInstance3D" parent="TableBase"]
+position = Vector3(0, 0.88, 0)
+mesh = SubResource("Mesh_table_top")
+material_override = SubResource("Material_wood")
+
+[node name="Apron" type="MeshInstance3D" parent="TableBase"]
+position = Vector3(0, 0.63, 0)
+mesh = SubResource("Mesh_apron")
+material_override = SubResource("Material_wood")
+
+[node name="LegFrontLeft" type="MeshInstance3D" parent="TableBase"]
+position = Vector3(-1.9, 0.3, -0.68)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="LegFrontRight" type="MeshInstance3D" parent="TableBase"]
+position = Vector3(1.9, 0.3, -0.68)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="LegBackLeft" type="MeshInstance3D" parent="TableBase"]
+position = Vector3(-1.9, 0.3, 0.68)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="LegBackRight" type="MeshInstance3D" parent="TableBase"]
+position = Vector3(1.9, 0.3, 0.68)
+mesh = SubResource("Mesh_leg")
+material_override = SubResource("Material_wood")
+
+[node name="SourceAsset" type="MeshInstance3D" parent="."]
+position = Vector3(-1.084, 0.98, 0)
+scale = Vector3(0.62, 0.62, 0.62)
+mesh = ExtResource("2_source_mesh")
+surface_material_override/0 = SubResource("Material_trim")
+surface_material_override/1 = SubResource("Material_felt")
+
+[node name="WheelPivot" type="Node3D" parent="."]
+position = Vector3(-1.277, 1.53, 0)
+
+[node name="OuterDisc" type="MeshInstance3D" parent="WheelPivot"]
+mesh = SubResource("Mesh_wheel_outer")
+material_override = SubResource("Material_trim")
+
+[node name="InnerDisc" type="MeshInstance3D" parent="WheelPivot"]
+position = Vector3(0, 0.07, 0)
+mesh = SubResource("Mesh_wheel_inner")
+material_override = SubResource("Material_black")
+
+[node name="Pockets" type="Node3D" parent="WheelPivot"]
+
+[node name="Pocket00_0" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.79, 0.125, 0)
+rotation = Vector3(0, 1.570796, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_zero")
+
+[node name="Pocket01_32" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.778637, 0.125, 0.133511)
+rotation = Vector3(0, 1.400981, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket02_15" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.744873, 0.125, 0.26318)
+rotation = Vector3(0, 1.231165, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket03_19" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.689681, 0.125, 0.385279)
+rotation = Vector3(0, 1.061349, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket04_4" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.614648, 0.125, 0.496294)
+rotation = Vector3(0, 0.891533, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket05_21" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.521933, 0.125, 0.593031)
+rotation = Vector3(0, 0.721717, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket06_2" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.414203, 0.125, 0.672708)
+rotation = Vector3(0, 0.551901, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket07_25" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.294557, 0.125, 0.733032)
+rotation = Vector3(0, 0.382086, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket08_17" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.166437, 0.125, 0.772269)
+rotation = Vector3(0, 0.21227, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket09_34" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.033529, 0.125, 0.789288)
+rotation = Vector3(0, 0.042454, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket10_6" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.100344, 0.125, 0.783601)
+rotation = Vector3(0, -0.127362, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket11_27" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.23133, 0.125, 0.755372)
+rotation = Vector3(0, -0.297178, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket12_13" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.355661, 0.125, 0.705411)
+rotation = Vector3(0, -0.466994, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket13_36" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.46976, 0.125, 0.635158)
+rotation = Vector3(0, -0.636809, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket14_11" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.570345, 0.125, 0.546632)
+rotation = Vector3(0, -0.806625, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket15_30" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.654523, 0.125, 0.44238)
+rotation = Vector3(0, -0.976441, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket16_8" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.719871, 0.125, 0.325402)
+rotation = Vector3(0, -1.146257, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket17_23" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.764509, 0.125, 0.199063)
+rotation = Vector3(0, -1.316073, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket18_10" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.787154, 0.125, 0.066997)
+rotation = Vector3(0, -1.485888, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket19_5" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.787154, 0.125, -0.066997)
+rotation = Vector3(0, -1.655704, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket20_24" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.764509, 0.125, -0.199063)
+rotation = Vector3(0, -1.82552, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket21_16" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.719871, 0.125, -0.325402)
+rotation = Vector3(0, -1.995336, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket22_33" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.654523, 0.125, -0.44238)
+rotation = Vector3(0, -2.165152, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket23_1" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.570345, 0.125, -0.546632)
+rotation = Vector3(0, -2.334968, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket24_20" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.46976, 0.125, -0.635158)
+rotation = Vector3(0, -2.504783, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket25_14" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.355661, 0.125, -0.705411)
+rotation = Vector3(0, -2.674599, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket26_31" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.23133, 0.125, -0.755372)
+rotation = Vector3(0, -2.844415, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket27_9" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(-0.100344, 0.125, -0.783601)
+rotation = Vector3(0, -3.014231, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket28_22" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.033529, 0.125, -0.789288)
+rotation = Vector3(0, -3.184047, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket29_18" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.166437, 0.125, -0.772269)
+rotation = Vector3(0, -3.353862, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket30_29" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.294557, 0.125, -0.733032)
+rotation = Vector3(0, -3.523678, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket31_7" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.414203, 0.125, -0.672708)
+rotation = Vector3(0, -3.693494, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket32_28" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.521933, 0.125, -0.593031)
+rotation = Vector3(0, -3.86331, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket33_12" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.614648, 0.125, -0.496294)
+rotation = Vector3(0, -4.033126, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket34_35" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.689681, 0.125, -0.385279)
+rotation = Vector3(0, -4.202942, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="Pocket35_3" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.744873, 0.125, -0.26318)
+rotation = Vector3(0, -4.372757, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_red")
+
+[node name="Pocket36_26" type="MeshInstance3D" parent="WheelPivot/Pockets"]
+position = Vector3(0.778637, 0.125, -0.133511)
+rotation = Vector3(0, -4.542573, 0)
+mesh = SubResource("Mesh_pocket")
+material_override = SubResource("Material_black")
+
+[node name="PocketNumbers" type="Node3D" parent="WheelPivot"]
+
+[node name="Number00_0" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.79, 0.158, 0)
+rotation = Vector3(-1.570796, 0, 0)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "0"
+
+[node name="Number01_32" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.778637, 0.158, 0.133511)
+rotation = Vector3(-1.570796, 0, -0.169816)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "32"
+
+[node name="Number02_15" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.744873, 0.158, 0.26318)
+rotation = Vector3(-1.570796, 0, -0.339632)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "15"
+
+[node name="Number03_19" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.689681, 0.158, 0.385279)
+rotation = Vector3(-1.570796, 0, -0.509447)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "19"
+
+[node name="Number04_4" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.614648, 0.158, 0.496294)
+rotation = Vector3(-1.570796, 0, -0.679263)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "4"
+
+[node name="Number05_21" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.521933, 0.158, 0.593031)
+rotation = Vector3(-1.570796, 0, -0.849079)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "21"
+
+[node name="Number06_2" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.414203, 0.158, 0.672708)
+rotation = Vector3(-1.570796, 0, -1.018895)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "2"
+
+[node name="Number07_25" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.294557, 0.158, 0.733032)
+rotation = Vector3(-1.570796, 0, -1.188711)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "25"
+
+[node name="Number08_17" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.166437, 0.158, 0.772269)
+rotation = Vector3(-1.570796, 0, -1.358527)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "17"
+
+[node name="Number09_34" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.033529, 0.158, 0.789288)
+rotation = Vector3(-1.570796, 0, -1.528342)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "34"
+
+[node name="Number10_6" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.100344, 0.158, 0.783601)
+rotation = Vector3(-1.570796, 0, -1.698158)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "6"
+
+[node name="Number11_27" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.23133, 0.158, 0.755372)
+rotation = Vector3(-1.570796, 0, -1.867974)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "27"
+
+[node name="Number12_13" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.355661, 0.158, 0.705411)
+rotation = Vector3(-1.570796, 0, -2.03779)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "13"
+
+[node name="Number13_36" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.46976, 0.158, 0.635158)
+rotation = Vector3(-1.570796, 0, -2.207606)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "36"
+
+[node name="Number14_11" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.570345, 0.158, 0.546632)
+rotation = Vector3(-1.570796, 0, -2.377421)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "11"
+
+[node name="Number15_30" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.654523, 0.158, 0.44238)
+rotation = Vector3(-1.570796, 0, -2.547237)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "30"
+
+[node name="Number16_8" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.719871, 0.158, 0.325402)
+rotation = Vector3(-1.570796, 0, -2.717053)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "8"
+
+[node name="Number17_23" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.764509, 0.158, 0.199063)
+rotation = Vector3(-1.570796, 0, -2.886869)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "23"
+
+[node name="Number18_10" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.787154, 0.158, 0.066997)
+rotation = Vector3(-1.570796, 0, -3.056685)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "10"
+
+[node name="Number19_5" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.787154, 0.158, -0.066997)
+rotation = Vector3(-1.570796, 0, -3.226501)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "5"
+
+[node name="Number20_24" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.764509, 0.158, -0.199063)
+rotation = Vector3(-1.570796, 0, -3.396316)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "24"
+
+[node name="Number21_16" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.719871, 0.158, -0.325402)
+rotation = Vector3(-1.570796, 0, -3.566132)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "16"
+
+[node name="Number22_33" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.654523, 0.158, -0.44238)
+rotation = Vector3(-1.570796, 0, -3.735948)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "33"
+
+[node name="Number23_1" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.570345, 0.158, -0.546632)
+rotation = Vector3(-1.570796, 0, -3.905764)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "1"
+
+[node name="Number24_20" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.46976, 0.158, -0.635158)
+rotation = Vector3(-1.570796, 0, -4.07558)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "20"
+
+[node name="Number25_14" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.355661, 0.158, -0.705411)
+rotation = Vector3(-1.570796, 0, -4.245395)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "14"
+
+[node name="Number26_31" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.23133, 0.158, -0.755372)
+rotation = Vector3(-1.570796, 0, -4.415211)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "31"
+
+[node name="Number27_9" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(-0.100344, 0.158, -0.783601)
+rotation = Vector3(-1.570796, 0, -4.585027)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "9"
+
+[node name="Number28_22" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.033529, 0.158, -0.789288)
+rotation = Vector3(-1.570796, 0, -4.754843)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "22"
+
+[node name="Number29_18" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.166437, 0.158, -0.772269)
+rotation = Vector3(-1.570796, 0, -4.924659)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "18"
+
+[node name="Number30_29" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.294557, 0.158, -0.733032)
+rotation = Vector3(-1.570796, 0, -5.094475)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "29"
+
+[node name="Number31_7" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.414203, 0.158, -0.672708)
+rotation = Vector3(-1.570796, 0, -5.26429)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "7"
+
+[node name="Number32_28" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.521933, 0.158, -0.593031)
+rotation = Vector3(-1.570796, 0, -5.434106)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "28"
+
+[node name="Number33_12" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.614648, 0.158, -0.496294)
+rotation = Vector3(-1.570796, 0, -5.603922)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "12"
+
+[node name="Number34_35" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.689681, 0.158, -0.385279)
+rotation = Vector3(-1.570796, 0, -5.773738)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "35"
+
+[node name="Number35_3" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.744873, 0.158, -0.26318)
+rotation = Vector3(-1.570796, 0, -5.943554)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "3"
+
+[node name="Number36_26" type="Label3D" parent="WheelPivot/PocketNumbers"]
+position = Vector3(0.778637, 0.158, -0.133511)
+rotation = Vector3(-1.570796, 0, -6.113369)
+pixel_size = 0.0026
+font_size = 22
+outline_size = 7
+text = "26"
+
+[node name="BallPivot" type="Node3D" parent="."]
+position = Vector3(-1.277, 1.53, 0)
+
+[node name="Ball" type="MeshInstance3D" parent="BallPivot"]
+position = Vector3(0.71, 0.24, 0)
+mesh = SubResource("Mesh_ball")
+material_override = SubResource("Material_ball")
+
+[node name="BetControls" type="Node3D" parent="."]
+
+[node name="BetZero" type="StaticBody3D" parent="BetControls" groups=["roulette_bet"]]
+position = Vector3(0.15, 1.17, -0.43)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("3_bet")
+bet_type = "zero"
+
+[node name="Mesh" type="MeshInstance3D" parent="BetControls/BetZero"]
+mesh = SubResource("Mesh_bet")
+material_override = SubResource("Material_zero")
+
+[node name="Collision" type="CollisionShape3D" parent="BetControls/BetZero"]
+shape = SubResource("Shape_bet")
+
+[node name="Label" type="Label3D" parent="BetControls/BetZero"]
+visible = false
+position = Vector3(0, 0.06, 0)
+rotation = Vector3(-1.570796, 0, 0)
+pixel_size = 0.004
+font_size = 28
+outline_size = 8
+text = "ЗЕРО  [E]"
+
+[node name="BetRed" type="StaticBody3D" parent="BetControls" groups=["roulette_bet"]]
+position = Vector3(0.95, 1.17, -0.43)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("3_bet")
+bet_type = "red"
+
+[node name="Mesh" type="MeshInstance3D" parent="BetControls/BetRed"]
+mesh = SubResource("Mesh_bet")
+material_override = SubResource("Material_red")
+
+[node name="Collision" type="CollisionShape3D" parent="BetControls/BetRed"]
+shape = SubResource("Shape_bet")
+
+[node name="Label" type="Label3D" parent="BetControls/BetRed"]
+visible = false
+position = Vector3(0, 0.06, 0)
+rotation = Vector3(-1.570796, 0, 0)
+pixel_size = 0.0034
+font_size = 26
+outline_size = 8
+text = "КРАСНОЕ  [E]"
+
+[node name="BetBlack" type="StaticBody3D" parent="BetControls" groups=["roulette_bet"]]
+position = Vector3(1.75, 1.17, -0.43)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("3_bet")
+bet_type = "black"
+
+[node name="Mesh" type="MeshInstance3D" parent="BetControls/BetBlack"]
+mesh = SubResource("Mesh_bet")
+material_override = SubResource("Material_black")
+
+[node name="Collision" type="CollisionShape3D" parent="BetControls/BetBlack"]
+shape = SubResource("Shape_bet")
+
+[node name="Label" type="Label3D" parent="BetControls/BetBlack"]
+visible = false
+position = Vector3(0, 0.06, 0)
+rotation = Vector3(-1.570796, 0, 0)
+pixel_size = 0.0034
+font_size = 26
+outline_size = 8
+text = "ЧЁРНОЕ  [E]"
+
+[node name="TitleLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 2.42, 0.15)
+billboard = 1
+no_depth_test = true
+pixel_size = 0.006
+font_size = 38
+outline_size = 12
+text = "РУЛЕТКА"
+
+[node name="ResultLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 2.05, 0.15)
+billboard = 1
+no_depth_test = true
+pixel_size = 0.005
+font_size = 27
+outline_size = 10
+text = "ВЫБЕРИ СТАВКУ: ЗЕРО / КРАСНОЕ / ЧЁРНОЕ"

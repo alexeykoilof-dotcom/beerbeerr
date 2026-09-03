@@ -1,0 +1,401 @@
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/warehouse/low_poly_portuguese_warehouse.glb" id="1_warehouse"]
+[ext_resource type="Script" path="res://warehouse_shop.gd" id="2_shop"]
+[ext_resource type="Script" path="res://mechanics_station.gd" id="3_station"]
+
+[sub_resource type="StandardMaterial3D" id="MatWood"]
+albedo_color = Color(0.34, 0.17, 0.06, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="MatCounter"]
+albedo_color = Color(0.16, 0.09, 0.035, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="MatMalt"]
+albedo_color = Color(0.88, 0.66, 0.24, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="MatHops"]
+albedo_color = Color(0.23, 0.52, 0.12, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="MatYeast"]
+albedo_color = Color(0.92, 0.88, 0.68, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="MatMetal"]
+albedo_color = Color(0.3, 0.35, 0.39, 1)
+metallic = 0.65
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="MatSign"]
+albedo_color = Color(0.08, 0.34, 0.12, 1)
+emission_enabled = true
+emission = Color(0.02, 0.16, 0.04, 1)
+emission_energy_multiplier = 0.28
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="CounterMesh"]
+size = Vector3(2.35, 0.9, 0.6)
+
+[sub_resource type="BoxShape3D" id="CounterShape"]
+size = Vector3(2.35, 0.9, 0.6)
+
+[sub_resource type="BoxMesh" id="ShelfMesh"]
+size = Vector3(1.15, 0.12, 1.25)
+
+[sub_resource type="BoxShape3D" id="ShelfShape"]
+size = Vector3(1.2, 2.45, 1.3)
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+size = Vector3(0.12, 2.4, 0.12)
+
+[sub_resource type="BoxMesh" id="CrateMesh"]
+size = Vector3(0.56, 0.48, 0.56)
+
+[sub_resource type="BoxShape3D" id="CrateShape"]
+size = Vector3(0.56, 0.48, 0.56)
+
+[sub_resource type="CapsuleMesh" id="SackMesh"]
+radius = 0.28
+height = 0.72
+
+[sub_resource type="CapsuleShape3D" id="SackShape"]
+radius = 0.28
+height = 0.72
+
+[sub_resource type="CylinderMesh" id="BarrelMesh"]
+top_radius = 0.34
+bottom_radius = 0.4
+height = 0.85
+
+[sub_resource type="CylinderShape3D" id="BarrelShape"]
+radius = 0.4
+height = 0.85
+
+[sub_resource type="BoxMesh" id="PalletMesh"]
+size = Vector3(1.35, 0.12, 1.05)
+
+[sub_resource type="BoxShape3D" id="BackWallShape"]
+size = Vector3(6.2, 3.5, 0.3)
+
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(0.3, 3.5, 3.6)
+
+[sub_resource type="BoxShape3D" id="FrontWallShape"]
+size = Vector3(2.05, 3.5, 0.3)
+
+[sub_resource type="BoxShape3D" id="RoofShape"]
+size = Vector3(6.2, 0.28, 3.6)
+
+[sub_resource type="BoxMesh" id="SignMesh"]
+size = Vector3(3.2, 0.9, 0.12)
+
+[node name="WarehouseShop" type="Node3D" groups=["warehouse_shop", "skip_auto_collision"]]
+script = ExtResource("2_shop")
+
+[node name="SourceAsset" parent="." instance=ExtResource("1_warehouse")]
+
+[node name="BuildingCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="BackWall" type="CollisionShape3D" parent="BuildingCollision"]
+position = Vector3(0, 1.75, -1.66)
+shape = SubResource("BackWallShape")
+
+[node name="LeftWall" type="CollisionShape3D" parent="BuildingCollision"]
+position = Vector3(-3.04, 1.75, 0)
+shape = SubResource("SideWallShape")
+
+[node name="RightWall" type="CollisionShape3D" parent="BuildingCollision"]
+position = Vector3(3.04, 1.75, 0)
+shape = SubResource("SideWallShape")
+
+[node name="FrontLeft" type="CollisionShape3D" parent="BuildingCollision"]
+position = Vector3(-2.08, 1.75, 1.66)
+shape = SubResource("FrontWallShape")
+
+[node name="FrontRight" type="CollisionShape3D" parent="BuildingCollision"]
+position = Vector3(2.08, 1.75, 1.66)
+shape = SubResource("FrontWallShape")
+
+[node name="Roof" type="CollisionShape3D" parent="BuildingCollision"]
+position = Vector3(0, 3.54, 0)
+shape = SubResource("RoofShape")
+
+[node name="ShopSign" type="Node3D" parent="."]
+position = Vector3(0, 2.65, 1.83)
+
+[node name="Board" type="MeshInstance3D" parent="ShopSign"]
+mesh = SubResource("SignMesh")
+material_override = SubResource("MatSign")
+
+[node name="Label" type="Label3D" parent="ShopSign"]
+position = Vector3(0, 0, 0.08)
+pixel_size = 0.0045
+text = "СКЛАД ПИВНОГО СЫРЬЯ\nСОЛОД • ХМЕЛЬ • ДРОЖЖИ"
+font_size = 34
+outline_size = 10
+
+[node name="PurchaseCounter" type="StaticBody3D" parent="." groups=["mechanics_station"]]
+position = Vector3(0, 0, 0.72)
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("3_station")
+interaction_text = "купить 3 комплекта сырья за $20"
+
+[node name="Visual" type="MeshInstance3D" parent="PurchaseCounter"]
+position = Vector3(0, 0.45, 0)
+mesh = SubResource("CounterMesh")
+material_override = SubResource("MatCounter")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PurchaseCounter"]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("CounterShape")
+
+[node name="Label" type="Label3D" parent="PurchaseCounter"]
+position = Vector3(0, 1.35, 0)
+pixel_size = 0.0045
+billboard = 1
+text = "1. ЗАКУПКА СЫРЬЯ\nE — комплект солода, хмеля и дрожжей"
+font_size = 30
+outline_size = 9
+
+[node name="Shelves" type="Node3D" parent="."]
+
+[node name="LeftShelf" type="StaticBody3D" parent="Shelves"]
+position = Vector3(-2.35, 0, -0.55)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Shelves/LeftShelf"]
+position = Vector3(0, 1.2, 0)
+shape = SubResource("ShelfShape")
+
+[node name="Bottom" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("ShelfMesh")
+material_override = SubResource("MatWood")
+
+[node name="Middle" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(0, 1.15, 0)
+mesh = SubResource("ShelfMesh")
+material_override = SubResource("MatWood")
+
+[node name="Top" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(0, 2.08, 0)
+mesh = SubResource("ShelfMesh")
+material_override = SubResource("MatWood")
+
+[node name="Post1" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(-0.48, 1.2, -0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Post2" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(0.48, 1.2, -0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Post3" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(-0.48, 1.2, 0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Post4" type="MeshInstance3D" parent="Shelves/LeftShelf"]
+position = Vector3(0.48, 1.2, 0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="RightShelf" type="StaticBody3D" parent="Shelves"]
+position = Vector3(2.35, 0, -0.55)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Shelves/RightShelf"]
+position = Vector3(0, 1.2, 0)
+shape = SubResource("ShelfShape")
+
+[node name="Bottom" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("ShelfMesh")
+material_override = SubResource("MatWood")
+
+[node name="Middle" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(0, 1.15, 0)
+mesh = SubResource("ShelfMesh")
+material_override = SubResource("MatWood")
+
+[node name="Top" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(0, 2.08, 0)
+mesh = SubResource("ShelfMesh")
+material_override = SubResource("MatWood")
+
+[node name="Post1" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(-0.48, 1.2, -0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Post2" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(0.48, 1.2, -0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Post3" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(-0.48, 1.2, 0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Post4" type="MeshInstance3D" parent="Shelves/RightShelf"]
+position = Vector3(0.48, 1.2, 0.5)
+mesh = SubResource("PostMesh")
+material_override = SubResource("MatMetal")
+
+[node name="Stock" type="Node3D" parent="."]
+
+[node name="MaltSack1" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(-1.0, 0.38, -1.05)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "мешок солода"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/MaltSack1"]
+mesh = SubResource("SackMesh")
+material_override = SubResource("MatMalt")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/MaltSack1"]
+shape = SubResource("SackShape")
+
+[node name="MaltSack2" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(-1.0, 0.38, -0.38)
+rotation = Vector3(0, 0.42, 0)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "мешок солода"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/MaltSack2"]
+mesh = SubResource("SackMesh")
+material_override = SubResource("MatMalt")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/MaltSack2"]
+shape = SubResource("SackShape")
+
+[node name="HopsCrate1" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(1.0, 0.3, -1.08)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "ящик хмеля"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/HopsCrate1"]
+mesh = SubResource("CrateMesh")
+material_override = SubResource("MatHops")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/HopsCrate1"]
+shape = SubResource("CrateShape")
+
+[node name="HopsCrate2" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(1.0, 0.3, -0.42)
+rotation = Vector3(0, -0.32, 0)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "ящик хмеля"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/HopsCrate2"]
+mesh = SubResource("CrateMesh")
+material_override = SubResource("MatHops")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/HopsCrate2"]
+shape = SubResource("CrateShape")
+
+[node name="YeastBox1" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(-2.35, 1.47, -0.55)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "коробка дрожжей"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/YeastBox1"]
+scale = Vector3(0.72, 0.72, 0.72)
+mesh = SubResource("CrateMesh")
+material_override = SubResource("MatYeast")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/YeastBox1"]
+scale = Vector3(0.72, 0.72, 0.72)
+shape = SubResource("CrateShape")
+
+[node name="YeastBox2" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(2.35, 1.47, -0.55)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "коробка дрожжей"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/YeastBox2"]
+scale = Vector3(0.72, 0.72, 0.72)
+mesh = SubResource("CrateMesh")
+material_override = SubResource("MatYeast")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/YeastBox2"]
+scale = Vector3(0.72, 0.72, 0.72)
+shape = SubResource("CrateShape")
+
+[node name="Pallets" type="Node3D" parent="."]
+
+[node name="Pallet1" type="MeshInstance3D" parent="Pallets"]
+position = Vector3(-1.05, 0.06, -0.72)
+mesh = SubResource("PalletMesh")
+material_override = SubResource("MatWood")
+
+[node name="Pallet2" type="MeshInstance3D" parent="Pallets"]
+position = Vector3(1.05, 0.06, -0.72)
+mesh = SubResource("PalletMesh")
+material_override = SubResource("MatWood")
+
+[node name="Barrel1" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(-2.48, 0.44, 0.78)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "бочка сырья"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/Barrel1"]
+mesh = SubResource("BarrelMesh")
+material_override = SubResource("MatWood")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/Barrel1"]
+shape = SubResource("BarrelShape")
+
+[node name="Barrel2" type="RigidBody3D" parent="Stock" groups=["pickup_object"]]
+position = Vector3(2.48, 0.44, 0.78)
+freeze = true
+freeze_mode = 1
+collision_layer = 2
+collision_mask = 3
+metadata/item_name = "бочка сырья"
+
+[node name="Visual" type="MeshInstance3D" parent="Stock/Barrel2"]
+mesh = SubResource("BarrelMesh")
+material_override = SubResource("MatWood")
+
+[node name="Collision" type="CollisionShape3D" parent="Stock/Barrel2"]
+shape = SubResource("BarrelShape")
+
+[node name="InteriorLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 2.85, 0)
+light_color = Color(1, 0.82, 0.56, 1)
+light_energy = 2.0
+omni_range = 7.0
+shadow_enabled = true
